@@ -1,10 +1,15 @@
 from logging.config import fileConfig
+from pathlib import Path
+import sys
 
 from alembic import context
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 from sqlalchemy import engine_from_config, pool
 
 from cognitivebrain.config import settings
 from cognitivebrain.models.base import Base
+import cognitivebrain.models  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.database_url)
