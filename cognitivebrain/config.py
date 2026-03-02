@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     app_name: str = "CognitiveBrainDB"
     app_env: str = Field(default="development", alias="APP_ENV")
     database_url: str = Field(
-        default="postgresql+psycopg://postgres:postgres@localhost:5432/cognitivebraindb",
+        default="postgresql+psycopg://postgres:postgres@db:5432/cognitivebraindb",
         alias="DATABASE_URL",
     )
 

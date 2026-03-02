@@ -1,13 +1,13 @@
 # CognitiveBrainDB
 
-CognitiveBrainDB is a starter FastAPI project scaffolded for asynchronous PostgreSQL access with SQLAlchemy 2.x and pgvector support.
+CognitiveBrainDB is a starter FastAPI project scaffolded for PostgreSQL access with synchronous SQLAlchemy 2.x and pgvector support.
 
 ## Tech Stack
 
 - Python 3.11
 - FastAPI
 - Uvicorn
-- SQLAlchemy 2.x (async)
+- SQLAlchemy 2.x (sync)
 - psycopg (binary)
 - pgvector
 - python-dotenv
