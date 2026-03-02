@@ -1,0 +1,1 @@
+"""CognitiveBrainDB application package."""
