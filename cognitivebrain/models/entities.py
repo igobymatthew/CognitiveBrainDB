@@ -40,10 +40,16 @@ class Chunk(Base):
         back_populates="chunk", uselist=False, cascade="all, delete-orphan"
     )
     outgoing_edges: Mapped[list[Edge]] = relationship(
-        foreign_keys="Edge.source_chunk_id", back_populates="source_chunk", cascade="all, delete-orphan"
+        foreign_keys="Edge.source_chunk_id",
+        back_populates="source_chunk",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
     )
     incoming_edges: Mapped[list[Edge]] = relationship(
-        foreign_keys="Edge.target_chunk_id", back_populates="target_chunk", cascade="all, delete-orphan"
+        foreign_keys="Edge.target_chunk_id",
+        back_populates="target_chunk",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
     )
     activations: Mapped[list[Activation]] = relationship(back_populates="chunk")
 
@@ -74,7 +80,7 @@ class Mode(Base):
     )
 
     edges: Mapped[list[Edge]] = relationship(back_populates="mode")
-    activations: Mapped[list[Activation]] = relationship(back_populates="mode")
+    activations: Mapped[list[Activation]] = relationship(back_populates="mode", passive_deletes=True)
 
 
 class Edge(Base):
