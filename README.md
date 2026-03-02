@@ -38,8 +38,12 @@ alembic/
 
 ## Quick Start
 
-1. Create and activate a Python 3.11 virtual environment.
-2. Install dependencies (includes Alembic):
+1. Create and activate a Python 3.11 virtual environment:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
@@ -52,7 +56,12 @@ alembic/
    uvicorn cognitivebrain.main:app --reload
    ```
 
-5. Run database migrations:
+5. Run tests:
+   ```bash
+   pytest
+   ```
+
+6. Run database migrations:
    ```bash
    make migrate
    ```
