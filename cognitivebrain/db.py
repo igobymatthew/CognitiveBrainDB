@@ -1,14 +1,15 @@
-from collections.abc import AsyncGenerator
+from collections.abc import Generator
 
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy import Engine, create_engine
+from sqlalchemy.orm import Session, sessionmaker
 
 from cognitivebrain.config import settings
 
 
-engine: AsyncEngine = create_async_engine(settings.database_url, echo=False, future=True)
-SessionLocal = async_sessionmaker(bind=engine, autoflush=False, autocommit=False, class_=AsyncSession)
+engine: Engine = create_engine(settings.database_url, echo=False, future=True)
+SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, class_=Session)
 
 
-async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
-    async with SessionLocal() as session:
+def get_db_session() -> Generator[Session, None, None]:
+    with SessionLocal() as session:
         yield session
