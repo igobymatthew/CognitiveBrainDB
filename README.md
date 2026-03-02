@@ -39,7 +39,7 @@ alembic/
 ## Quick Start
 
 1. Create and activate a Python 3.11 virtual environment.
-2. Install dependencies:
+2. Install dependencies (includes Alembic):
    ```bash
    pip install -r requirements.txt
    ```
@@ -50,6 +50,16 @@ alembic/
 4. Run the application:
    ```bash
    uvicorn cognitivebrain.main:app --reload
+   ```
+
+5. Run database migrations:
+   ```bash
+   make migrate
+   ```
+
+   This runs:
+   ```bash
+   alembic upgrade head
    ```
 
 ## Database Migrations
@@ -63,7 +73,7 @@ alembic revision -m "init"
 Apply migrations with:
 
 ```bash
-alembic upgrade head
+make migrate
 ```
 
 ## Status
