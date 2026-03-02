@@ -110,22 +110,23 @@ def query_and_drift(
     """
     query_vec = embed_text(query_text)
 
-    modes = session.scalars(select(Mode)).all()
-    if not modes:
+    seed_limit = max(0, k_seeds)
+    if seed_limit == 0:
         return {"activation_id": None, "seeds": [], "touched": [], "delta": {}}
 
-    ranked = sorted(
-        ((mode, _cosine_similarity(query_vec, mode.vec_current)) for mode in modes),
-        key=lambda item: item[1],
-        reverse=True,
+    seed_distance = Mode.vec_current.cosine_distance(query_vec)
+    seed_rows = session.execute(
+        select(Mode, seed_distance.label("distance"))
+        .order_by(seed_distance)
+        .limit(seed_limit)
+        .with_for_update()
     )
-    seeds = [mode for mode, _ in ranked[: max(0, k_seeds)]]
+    seeds_with_distance = seed_rows.all()
+    seeds = [mode for mode, _ in seeds_with_distance]
     seed_ids = [mode.id for mode in seeds]
 
     if not seed_ids:
         return {"activation_id": None, "seeds": [], "touched": [], "delta": {}}
-
-    session.scalars(select(Mode).where(Mode.id.in_(seed_ids)).with_for_update()).all()
 
     touched_ids = _expand_touched_mode_ids(session, seed_ids, expand_hops=expand_hops, k_touch=k_touch)
     locked_touched = session.scalars(select(Mode).where(Mode.id.in_(touched_ids)).with_for_update()).all()
@@ -175,7 +176,8 @@ def query_and_drift(
     if "chunk_id" in cols:
         payload["chunk_id"] = None
     if "score" in cols:
-        payload["score"] = float(ranked[0][1])
+        best_distance = float(seeds_with_distance[0][1])
+        payload["score"] = 1.0 - best_distance
     if "seed_mode_ids" in cols:
         payload["seed_mode_ids"] = seed_ids
     if "touched_mode_ids" in cols:
